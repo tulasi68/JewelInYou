@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aabharan – Jewellery Try-On</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#fbf6ee;--fg:#2a1a14;--card:#fff;--mut:#7a6a60;--ac:#7b1e3a;--gold:#b8860b;--line:#e6d9c6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1412;--fg:#f4e9dc;--card:#2a1f1b;--mut:#b4a496;--ac:#e0839c;--gold:#e0b030;--line:#40312b}}
+:root[data-theme="dark"]{--bg:#1c1412;--fg:#f4e9dc;--card:#2a1f1b;--mut:#b4a496;--ac:#e0839c;--gold:#e0b030;--line:#40312b}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",serif;max-width:560px;margin:auto;padding-bottom:84px}
+h1,h2{margin:0}header{padding:16px;text-align:center}header h1{font-size:22px;color:var(--gold);letter-spacing:1px}
+header p{margin:2px 0 0;color:var(--mut);font-size:13px;font-family:system-ui,sans-serif}
+main{padding:0 16px;font-family:system-ui,sans-serif}
+.bar{height:5px;background:var(--line);border-radius:9px;margin:4px 0 22px}.bar i{display:block;height:100%;background:var(--ac);border-radius:9px;transition:width .3s}
+h2{font-family:Georgia,serif;font-size:24px;margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:12px 18px;border:1.5px solid var(--line);border-radius:30px;background:var(--card);color:var(--fg);font-size:16px;cursor:pointer}
+.chip.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:12px;padding:14px 20px;font-size:16px;width:100%;margin-top:20px;cursor:pointer}
+.btn.alt{background:var(--card);color:var(--fg);border:1.5px solid var(--line);margin-top:8px}
+.btn:disabled{opacity:.4}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px}.tabs .chip{white-space:nowrap;padding:8px 14px;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;position:relative}
+.card img{width:100%;aspect-ratio:1;display:block;background:radial-gradient(circle,#fff6 ,transparent)}
+.card b{font-size:13px;display:block}.card span{font-size:14px;color:var(--gold);font-weight:600}
+.heart{position:absolute;right:8px;top:6px;font-size:22px;background:none;border:0;color:var(--ac);cursor:pointer}
+.sticky{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line);max-width:560px;margin:auto}
+.sticky .btn{margin:0}
+canvas{width:100%;height:auto;border-radius:14px;touch-action:none;background:var(--card);border:1px solid var(--line);display:block}
+.row{display:flex;gap:8px;margin:10px 0}.row>*{flex:1}
+label.btn{display:block;text-align:center;margin:0}
+.rng{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut)}.rng input{flex:1}
+.worn{display:flex;gap:8px;overflow-x:auto;padding:8px 0}.worn img{width:60px;height:60px;border:2px solid var(--line);border-radius:10px;background:var(--card);flex:none;cursor:pointer}
+.worn img.on{border-color:var(--ac)}
+.looks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.looks img{width:100%;border-radius:8px}
+.note{font-size:12px;color:var(--mut);margin:6px 0}
+.back{background:none;border:0;color:var(--mut);padding:8px 0;font-size:14px;cursor:pointer}
+.nav{display:flex;gap:0}.nav button{flex:1;border:0;background:none;color:var(--mut);padding:10px 2px;font-size:13px;cursor:pointer}.nav button.on{color:var(--ac);font-weight:700}
+.in{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);font-size:16px;margin:6px 0}
+.look{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:14px}.look img{width:100%;border-radius:10px}
+.cm{font-size:13px;padding:4px 0;border-top:1px solid var(--line)}.vt{display:flex;gap:8px;margin:8px 0}.vt button{flex:1;padding:8px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font-size:15px}
+.qr{background:#fff;padding:12px;border-radius:12px;width:230px;margin:10px auto}.qr svg{width:100%;height:auto}
+.push{width:100%;margin-top:6px;padding:8px;border-radius:9px;border:0;background:var(--ac);color:#fff}.push:disabled{background:var(--line);color:var(--mut)}
+</style></head><body>
+<header><h1>💍 AABHARAN</h1><p>Every design in the shop, on you – with the whole family</p></header>
+<main id="app"></main><div id="bot"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+const $=i=>document.getElementById(i);
+const TN={n:"Necklace",e:"Earrings",b:"Bangles",v:"Vaddanam (waist belt)",k:"Vanki (armlet)",t:"Maang tikka"};
+const STY=["Temple","Kundan","Antique","Diamond","Modern"];
+const COL={Temple:["#d4a017","#c0392b"],Kundan:["#e0b030","#2e8b57"],Antique:["#a97c35","#7b2d26"],Diamond:["#c5ced3","#3d9be0"],Modern:["#e3a98e","#8e6bbf"]};
+const BUD=[["Under ₹50K",0,5e4],["₹50K – ₹2L",5e4,2e5],["₹2L – ₹5L",2e5,5e5],["Above ₹5L",5e5,1e9],["Any budget",0,1e9]];
+const Q=[
+{k:"occ",t:"What’s the occasion?",o:["Wedding","Engagement","Festival","Gift"]},
+{k:"who",t:"Who will wear it?",o:["Bride","Bride’s mother","Groom’s mother","Sister / friend"]},
+{k:"types",t:"What are you looking for?",m:1,o:Object.entries(TN)},
+{k:"style",t:"Which style do you like?",o:[...STY,"Show me everything"]},
+{k:"bud",t:"Approximate budget per piece?",o:BUD.map((b,i)=>[i,b[0]])}];
+const P={e:[[.24,.46,.15,0],[.76,.46,.15,1]],n:[[.5,.74,.6,0]],b:[[.18,.9,.3,0]],v:[[.5,.93,.8,0]],k:[[.86,.8,.26,0]],t:[[.5,.2,.14,0]]};
+const price=(t,s,st)=>Math.round({n:90,e:35,b:120,v:200,k:150,t:25}[t]*{Temple:1.3,Kundan:1,Antique:1.1,Diamond:3,Modern:.7}[st]*(.5+((s*37)%100)/45))*1000;
+const fmt=p=>"₹"+p.toLocaleString("en-IN");
+function art(t,st,s){const [g,m]=COL[st],r=n=>((s*9301+n*49297)%233280)/233280;let o="";
+if(t=="n"){const cy=110+r(1)*50,rows=1+s%3;for(let i=0;i<rows;i++){const y=cy+i*20;o+=`<path d="M${22+i*9} 25Q100 ${y} ${178-i*9} 25" fill="none" stroke="${g}" stroke-width="2"/><path d="M${22+i*9} 25Q100 ${y} ${178-i*9} 25" fill="none" stroke="${i%2?m:g}" stroke-width="6" stroke-linecap="round" stroke-dasharray=".1 8"/>`}
+const py=12.5+.5*(cy+(rows-1)*20);o+=s%3==0?`<circle cx="100" cy="${py+14}" r="15" fill="${g}"/><circle cx="100" cy="${py+14}" r="8" fill="${m}"/>`:s%3==1?`<path d="M100 ${py}l16 18-16 26-16-26z" fill="${g}"/><path d="M100 ${py+9}l7 9-7 12-7-12z" fill="${m}"/>`:`<path d="M100 ${py}q24 20 0 44q-24-24 0-44" fill="${g}"/><circle cx="100" cy="${py+20}" r="6" fill="${m}"/>`}
+if(t=="e"){o=`<circle cx="100" cy="28" r="11" fill="${g}"/><circle cx="100" cy="28" r="5" fill="${m}"/><path d="M68 62Q100 30 132 62z" fill="${g}"/>`;for(let k=0;k<5;k++)o+=`<circle cx="${74+k*13}" cy="72" r="5" fill="#fff" stroke="${g}" stroke-width="2"/>`;o+=`<path d="M100 82q18 22 0 44q-18-22 0-44" fill="${m}" stroke="${g}" stroke-width="3"/>`}
+if(t=="b"){for(let i=0;i<4+s%3;i++){o+=`<ellipse cx="100" cy="${50+i*18}" rx="82" ry="14" fill="none" stroke="${g}" stroke-width="8"/>`;if(i%2==0)for(let k=0;k<5;k++)o+=`<circle cx="${40+k*30}" cy="${57+i*18}" r="3" fill="${m}"/>`}}
+if(t=="v"){o=`<rect x="8" y="80" width="184" height="34" rx="17" fill="${g}"/>`;for(let i=0;i<7;i++)o+=`<circle cx="${28+i*24}" cy="97" r="8" fill="${m}" stroke="#fff8" stroke-width="2"/>`;for(let i=0;i<9;i++)o+=`<path d="M${20+i*20} 114v${14+r(i)*20}" stroke="${g}" stroke-width="3"/><circle cx="${20+i*20}" cy="${130+r(i)*20}" r="4" fill="${m}"/>`}
+if(t=="k"){o=`<path d="M30 40L100 150L170 40" fill="none" stroke="${g}" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/><path d="M30 40L100 150L170 40" fill="none" stroke="${m}" stroke-width="4" stroke-dasharray="1 9" stroke-linecap="round"/><path d="M100 150l-14 18 14 22 14-22z" fill="${g}"/><circle cx="100" cy="166" r="5" fill="${m}"/>`}
+if(t=="t"){o=`<path d="M100 4V70" stroke="${g}" stroke-width="3"/><path d="M20 20Q100 56 180 20" fill="none" stroke="${g}" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round"/><circle cx="100" cy="98" r="26" fill="${g}"/><circle cx="100" cy="98" r="15" fill="${m}"/><circle cx="100" cy="98" r="6" fill="#fff"/>`}
+return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">${o}</svg>`}
+const uri=it=>"data:image/svg+xml;utf8,"+encodeURIComponent(art(it.t,it.st,it.s));
+const BASE="https://claude.ai/artifact/KFWjvxLraPbrhLcM4dtKmJ";
+const S={role:null,code:"",name:"",step:0,a:{types:[],occ:"Wedding"},tab:null,cnt:{},items:{},fav:[],ov:[],sel:-1,photo:null,view:"land",pushed:[],looks:[],votes:[],cms:[],qr:false,outfit:"Kanjeevaram saree",sst:"Show me everything"};
+const OUT={"Kanjeevaram saree":{c:"#9b1b30",g:"#e0b030"},"Lehenga":{c:"#d6457a",g:"#f3d27a"},"Modern dress":{c:"#222",g:"#888"},"Kurta set":{c:"#1f7a6d",g:"#e8d9a0"}};
+const OCC={Wedding:["Kanjeevaram saree",["#f7e3c4","#e0b57a"]],Engagement:["Lehenga",["#f6dfe6","#e3a9bd"]],Party:["Modern dress",["#3b2a4f","#1b1230"]],Festival:["Kurta set",["#fbe8b8","#f0a55a"]]};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let db=null,uid="anon";
+const rm=p=>db.collection("rooms/"+S.code+"/"+p);
+function list(t,st,n){const b=BUD[S.a.bud??4],out=[];n=n||12;
+for(let s=0;s<600&&out.length<n;s++){const sty=(st||S.a.style)=="Show me everything"||!(st||S.a.style)?STY[s%5]:(st||S.a.style),p=price(t,s,sty);
+if(p>=b[1]&&p<b[2]){const id=t+s+sty;out.push(S.items[id]||(S.items[id]={id,t,s,st:sty,p,name:`${sty} ${TN[t].split(" ")[0]} #${s+1}`}))}}return out}
+function grid(L,shop){return`<div class="grid">${L.map(it=>`<div class="card">${shop?"":`<button class="heart" onclick="fav('${it.id}')">${S.fav.includes(it.id)?"♥":"♡"}</button>`}<img src="${uri(it)}" alt=""><b>${esc(it.name)}</b><span>${fmt(it.p)}</span>${shop?`<button class="push" ${S.pushed.some(x=>x.id==it.id)?"disabled":""} onclick="pushIt('${it.id}')">${S.pushed.some(x=>x.id==it.id)?"Pushed ✓":"Push to bride"}</button>`:""}</div>`).join("")}</div>`}
+function tabs(){const ts=S.role=="shop"?Object.keys(TN):S.a.types;S.tab=ts.includes(S.tab)?S.tab:ts[0];return`<div class="tabs">${ts.map(t=>`<button class="chip ${t==S.tab?"on":""}" onclick="S.tab='${t}';render()">${TN[t]}</button>`).join("")}</div>`}
+function render(){const a=$("app"),bot=$("bot");bot.innerHTML="";const v=S.view;
+if(v=="land"){const h=location.hash.slice(1).toUpperCase().replace(/[^A-Z0-9]/g,"");
+a.innerHTML=`<h2>Welcome</h2><input id="nm" class="in" placeholder="Your name"><input id="cd" class="in" placeholder="Room code (family / shop)" value="${S.code||h}"><button class="btn" onclick="go('bride')">I’m the bride – start a new room</button><button class="btn alt" onclick="go('family')">Join as family / friend</button><button class="btn alt" onclick="go('shop')">Join as shop worker</button>${db?"":'<p class="note">Shared rooms need you to be signed in to Claude. You can still browse and try on alone.</p>'}`;return}
+if(S.role=="bride"){nav(bot);if(S.qr)a.innerHTML=qrHTML();else if(v=="wiz")wiz(a);else if(v=="browse"){S.tab=S.tab||S.a.types[0];a.innerHTML=`<button class="back" onclick="S.view='wiz';S.step=0;render()">← Change preferences</button>${tabs()}${grid(list(S.tab,null,S.cnt[S.tab]))}<button class="btn alt" onclick="S.cnt[S.tab]=(S.cnt[S.tab]||12)+12;render()">Show 12 more designs</button>`}
+else if(v=="picks")a.innerHTML=`<h2>Shop picks for you</h2>${S.pushed.length?grid(S.pushed):'<p class="note">The shop team hasn’t pushed designs yet. Share the invite QR so they can join.</p>'}`;
+else if(v=="try")tryOn(a);else if(v=="fam")a.innerHTML=`<h2>Family feedback</h2>${S.looks.length?S.looks.map(l=>look(l,false)).join(""):'<p class="note">Share a look from Try-on and the family will vote here.</p>'}`}
+if(S.role=="family"){a.innerHTML=`<h2>Looks to review</h2><p class="note">Room ${S.code}</p>${S.looks.length?S.looks.map(l=>look(l,true)).join(""):'<p class="note">Waiting for the bride to share a look…</p>'}`}
+if(S.role=="shop"){a.innerHTML=`<h2>Shop console</h2><p class="note">Room ${S.code} · push designs to the bride’s screen</p><div class="tabs">${["Show me everything",...STY].map(s=>`<button class="chip ${s==S.sst?"on":""}" onclick="S.sst='${s}';render()">${s.replace("Show me everything","All")}</button>`).join("")}</div>${tabs()}${grid(list(S.tab,S.sst,S.cnt[S.tab]),1)}<button class="btn alt" onclick="S.cnt[S.tab]=(S.cnt[S.tab]||12)+12;render()">Show 12 more</button>`}}
+function nav(bot){const n=[["wiz","Preferences"],["browse","Browse"],["picks","Shop picks"+(S.pushed.length?` (${S.pushed.length})`:"")],["try","Try-on"],["fam","Family"+(S.looks.length?` (${S.looks.length})`:"")]];
+bot.innerHTML=`<div class="sticky"><div class="nav">${n.map(([k,l])=>`<button class="${S.view==k&&!S.qr?"on":""}" onclick="S.qr=false;S.view='${k}';if(k=='wiz')S.step=0;render();if(k=='try')setTimeout(draw,50)">${l}</button>`).join("")}<button class="${S.qr?"on":""}" onclick="S.qr=!S.qr;render()">Invite</button></div></div>`}
+function qrHTML(){const link=BASE+"#"+S.code;let svg="";try{const q=qrcode(0,"M");q.addData(link);q.make();svg=q.createSvgTag({scalable:true,margin:0})}catch(e){}
+return`<h2>Invite family & shop</h2><p class="note">Scan to join room <b>${S.code}</b> (or share the code).</p><div class="qr">${svg||"QR unavailable"}</div><p class="note" style="word-break:break-all">${link}</p><a class="btn" style="display:block;text-align:center;text-decoration:none" target="_blank" href="https://wa.me/?text=${encodeURIComponent("Join my jewellery shopping room "+S.code+": "+link)}">Send invite on WhatsApp</a>`}
+function wiz(a){const q=Q[S.step],v=S.a[q.k];a.innerHTML=`<div class="bar"><i style="width:${(S.step+1)/Q.length*100}%"></i></div>${S.step?'<button class="back" onclick="S.step--;render()">← Back</button>':""}<h2>${q.t}</h2><div class="chips">${q.o.map(o=>{const[val,lab]=Array.isArray(o)?o:[o,o],on=q.m?v&&v.includes(val):v===val;return`<button class="chip ${on?"on":""}" onclick="pick('${val}')">${lab}</button>`}).join("")}</div>${q.m?`<button class="btn" ${S.a.types.length?"":"disabled"} onclick="next()">Continue</button>`:""}`}
+function pick(v){const q=Q[S.step];if(q.m){const t=S.a.types,i=t.indexOf(v);i<0?t.push(v):t.splice(i,1);render()}else{S.a[q.k]=q.k=="bud"?+v:v;if(q.k=="occ")S.outfit=OCC[v]?OCC[v][0]:S.outfit;next()}}
+function next(){if(S.step<Q.length-1){S.step++;render()}else{S.tab=null;S.cnt={};S.view="browse";render()}}
+function fav(id){const i=S.fav.indexOf(id);i<0?S.fav.push(id):S.fav.splice(i,1);render()}
+function tryOn(a){const f=S.fav.map(i=>S.items[i]).filter(Boolean);
+a.innerHTML=`<canvas id="cv" width="360" height="480"></canvas>
+<div class="row"><label class="btn">📷 Take / upload photo<input type="file" accept="image/*" capture="user" hidden onchange="photo(this)"></label><button class="btn alt" style="margin:0" onclick="flip()">⇋ Turn</button></div>
+<div class="rng">Size <input id="sz" type="range" min="5" max="100" oninput="adj()"> Tilt <input id="rt" type="range" min="-45" max="45" value="0" oninput="adj()"></div>
+<p class="note">Occasion</p><div class="tabs">${Object.keys(OCC).map(o=>`<button class="chip ${S.a.occ==o?"on":""}" onclick="S.a.occ='${o}';S.outfit=OCC['${o}'][0];render();bind()">${o}</button>`).join("")}</div>
+<p class="note">Outfit ${S.photo?"(outfit swap on your own photo needs the AI version – shown on the demo model)":""}</p><div class="tabs">${Object.keys(OUT).map(o=>`<button class="chip ${S.outfit==o?"on":""}" onclick="S.outfit='${o}';render();bind()">${o}</button>`).join("")}</div>
+<p class="note">${f.length?"Tap pieces to wear several together – drag to position.":"Shortlist designs with ♡ in Browse or Shop picks first."}</p>
+<div class="worn" id="wn">${f.map(it=>`<img class="${S.ov.some(o=>o.id==it.id)?"on":""}" src="${uri(it)}" onclick="wear('${it.id}')">`).join("")}</div>
+<button class="btn" onclick="shareFam()">Share this look with family</button><button class="btn alt" onclick="shareWA()">Send picture on WhatsApp</button><p class="note" id="msg"></p>`;bind()}
+const W=360,H=480;let cv,cx,flipped=false;
+function photo(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{S.photo=im;render();bind()};im.src=r.result};r.readAsDataURL(f)}
+function flip(){flipped=!flipped;draw()}
+function wear(id){const it=S.items[id],had=S.ov.some(o=>o.id==id);S.ov=S.ov.filter(o=>o.t!=it.t);if(!had){const im=new Image();im.onload=draw;im.src=uri(it);P[it.t].forEach(([x,y,w,f])=>S.ov.push({id,t:it.t,im,x,y,w,rot:0,f}))}S.sel=-1;draw();document.querySelectorAll("#wn img").forEach((e,i)=>e.classList.toggle("on",S.ov.some(o=>o.id==S.fav[i])))}
+function draw(){cv=$("cv");if(!cv)return;cx=cv.getContext("2d");cx.clearRect(0,0,W,H);cx.save();if(flipped){cx.translate(W,0);cx.scale(-1,1)}
+if(S.photo){const k=Math.max(W/S.photo.width,H/S.photo.height),w=S.photo.width*k,h=S.photo.height*k;cx.drawImage(S.photo,(W-w)/2,(H-h)/2,w,h)}
+else{const bg=OCC[S.a.occ]?OCC[S.a.occ][1]:["#f3e3d0","#d9b99b"],o=OUT[S.outfit]||OUT["Modern dress"],g=cx.createLinearGradient(0,0,0,H);g.addColorStop(0,bg[0]);g.addColorStop(1,bg[1]);cx.fillStyle=g;cx.fillRect(0,0,W,H);
+const skin="#c28a62",body=()=>{cx.beginPath();cx.moveTo(20,H);cx.quadraticCurveTo(40,300,150,290);cx.lineTo(210,290);cx.quadraticCurveTo(320,300,340,H);cx.closePath()};
+cx.fillStyle=skin;cx.beginPath();cx.ellipse(180,170,62,80,0,0,7);cx.fill();cx.fillRect(150,230,60,70);
+cx.fillStyle="#2a1a14";cx.beginPath();cx.ellipse(180,120,66,52,0,Math.PI,0);cx.fill();
+body();cx.fillStyle=o.c;cx.fill();cx.save();body();cx.clip();
+if(S.outfit=="Kanjeevaram saree"){cx.strokeStyle=o.g;cx.lineWidth=16;cx.beginPath();cx.moveTo(60,285);cx.lineTo(330,H);cx.stroke();cx.lineWidth=3;cx.strokeStyle="#fff8";cx.beginPath();cx.moveTo(52,300);cx.lineTo(322,H);cx.stroke()}
+if(S.outfit=="Lehenga"){cx.fillStyle=o.g;for(let i=0;i<30;i++){cx.beginPath();cx.arc(40+(i*53)%290,300+(i*37)%180,3,0,7);cx.fill()}}
+if(S.outfit=="Kurta set"){cx.strokeStyle=o.g;cx.lineWidth=6;cx.beginPath();cx.moveTo(180,300);cx.lineTo(180,H);cx.stroke()}
+cx.fillStyle=skin;cx.beginPath();cx.moveTo(138,288);cx.lineTo(222,288);cx.lineTo(180,S.outfit=="Modern dress"?360:335);cx.fill();cx.restore();
+cx.fillStyle=o.g=="#888"?"#fff":"#6b4a37";cx.font="12px system-ui";cx.textAlign="center";cx.fillText("Demo model · "+S.outfit,180,22)}
+cx.restore();
+S.ov.forEach((o,i)=>{cx.save();cx.translate(o.x*W,o.y*H);cx.rotate(o.rot*Math.PI/180);if(o.f)cx.scale(-1,1);const w=o.w*W;cx.drawImage(o.im,-w/2,-w/2,w,w);if(i==S.sel){cx.setLineDash([5,4]);cx.strokeStyle="#7b1e3a";cx.strokeRect(-w/2,-w/2,w,w)}cx.restore()})}
+function bind(){cv=$("cv");if(!cv)return;let drag=-1;const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]};
+cv.onpointerdown=e=>{const[x,y]=pt(e);drag=-1;for(let i=S.ov.length-1;i>=0;i--){const o=S.ov[i],h=o.w*W/2;if(Math.abs(x-o.x*W)<h&&Math.abs(y-o.y*H)<h){drag=i;break}}S.sel=drag;if(drag>=0){$("sz").value=S.ov[drag].w*100;$("rt").value=S.ov[drag].rot;cv.setPointerCapture(e.pointerId)}draw()};
+cv.onpointermove=e=>{if(drag<0)return;const[x,y]=pt(e);S.ov[drag].x=x/W;S.ov[drag].y=y/H;draw()};cv.onpointerup=()=>drag=-1;draw()}
+function adj(){const o=S.ov[S.sel];if(!o)return;o.w=$("sz").value/100;o.rot=+$("rt").value;draw()}
+const say=t=>{const m=$("msg");if(m)m.textContent=t};
+function snap(w,h,q){S.sel=-1;draw();const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(cv,0,0,w,h);return c.toDataURL("image/jpeg",q)}
+async function shareFam(){if(!db){say("Sign in to Claude to share with family.");return}if(!S.ov.length){say("Wear at least one piece first.");return}
+const names=[...new Set(S.ov.map(o=>S.items[o.id].name))],id="l"+Date.now().toString(36)+uid.slice(0,3);
+try{await rm("looks").doc(id).set({img:snap(240,320,.6),names,occ:S.a.occ,outfit:S.outfit,by:S.name||"Bride",ts:Date.now()});say("Shared – the family can vote now.")}catch(e){say("Couldn’t share: "+(e.message||e.code))}}
+async function shareWA(){const names=[...new Set(S.ov.map(o=>S.items[o.id].name))].join(", ");const txt="How does this look? "+names;const url=snap(360,480,.85);
+try{const b=await (await fetch(url)).blob(),f=new File([b],"look.jpg",{type:"image/jpeg"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:txt});return}}catch(e){}
+try{const d=await claude.use("downloads");if(d){await d.save({filename:"my-look.jpg",data:await (await fetch(url)).blob()});say("Picture saved – attach it in WhatsApp.");return}}catch(e){}
+window.open("https://wa.me/?text="+encodeURIComponent(txt),"_blank")}
+function look(l,act){const vs=S.votes.filter(v=>v.look==l.id),up=vs.filter(v=>v.v>0).length,dn=vs.filter(v=>v.v<0).length,cs=S.cms.filter(c=>c.look==l.id).sort((a,b)=>a.ts-b.ts);
+return`<div class="look"><img src="${esc(l.img)}"><b>${esc(l.occ)} · ${esc(l.outfit)}</b><p class="note">${(l.names||[]).map(esc).join(", ")}</p><div class="vt"><button ${act?`onclick="vote('${l.id}',1)"`:"disabled"}>👍 ${up}</button><button ${act?`onclick="vote('${l.id}',-1)"`:"disabled"}>👎 ${dn}</button></div>${cs.map(c=>`<div class="cm"><b>${esc(c.who)}:</b> ${esc(c.text)}</div>`).join("")}${act?`<input class="in" id="c_${l.id}" placeholder="Add a comment"><button class="btn alt" style="margin-top:0" onclick="cmt('${l.id}')">Send comment</button>`:""}</div>`}
+async function vote(id,v){if(!db)return;try{await rm("votes").doc(id+"_"+uid).set({look:id,uid,v,who:S.name||"Family"})}catch(e){}}
+async function cmt(id){const el=$("c_"+id),t=el.value.trim();if(!t||!db)return;el.value="";try{await rm("comments").doc(Date.now().toString(36)+uid.slice(0,4)).set({look:id,text:t.slice(0,300),who:S.name||"Family",ts:Date.now()})}catch(e){}}
+async function pushIt(id){if(!db)return;const it=S.items[id];try{await rm("pushed").doc(id).set({...it,by:S.name||"Shop"})}catch(e){}}
+function sub(){if(!db)return;const on=(p,k,f)=>rm(p).onSnapshot(s=>{S[k]=s.docs.map(d=>({...d.data(),id:d.data().id||d.id}));if(f)f();S.view=="try"&&S.role=="bride"?nav($("bot")):render()},()=>{});
+on("pushed","pushed",()=>S.pushed.forEach(i=>S.items[i.id]=i));on("looks","looks",()=>S.looks.sort((a,b)=>b.ts-a.ts));on("votes","votes");on("comments","cms")}
+async function go(role){S.name=$("nm").value.trim();let c=$("cd").value.trim().toUpperCase().replace(/[^A-Z0-9]/g,"");
+if(role=="bride"){c="";for(let i=0;i<5;i++)c+="ABCDEFGHJKMNPQRSTUVWXYZ23456789"[Math.random()*31|0];S.view="wiz"}else{if(!c){$("cd").placeholder="Enter the room code!";return}S.view="x"}
+S.role=role;S.code=c;if(db){try{if(role=="bride")await db.doc("rooms/"+c).set({bride:uid,name:S.name})}catch(e){}sub()}render()}
+(async()=>{try{if(window.claude){db=await claude.use("db");const u=await claude.use("user");if(u&&u.id)uid=(await u.id())||"anon"}}catch(e){}render()})();
+</script></body></html>
